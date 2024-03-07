@@ -8,10 +8,22 @@ import {
 	ScrollView,
 	ActivityIndicator,
 } from "react-native";
+import { Fontisto } from "@expo/vector-icons";
 import * as Location from "expo-location";
 
 const API_KEY = "551d7941ef7f8e2afd00ea0657c07d52";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
+
+const icons = {
+	Clouds: "cloudy",
+	Clear: "day-sunny",
+	Atmosphere: "cloudy-gusts",
+	Snow: "snow",
+	Rain: "rains",
+	Drizzle: "rain",
+	Thunderstorm: "lightning",
+};
+
 export default function App() {
 	const [city, setCity] = useState("Loading..");
 	const [days, setDays] = useState([]);
@@ -51,20 +63,35 @@ export default function App() {
 				contentContainerStyle={styles.weather}
 			>
 				{days.length === 0 ? (
-					<View style={styles.day}>
+					<View style={{ ...styles.day, alignItems: "center" }}>
 						<ActivityIndicator color="white" size="large" />
 					</View>
 				) : (
 					days.map((day, idx) => (
 						<View key={idx} style={styles.day}>
-							<Text style={styles.date}>
+							{/* <Text style={styles.date}>
 								{new Date(day.dt * 1000).toLocaleDateString(
 									"ko-KR"
 								)}
-							</Text>
-							<Text style={styles.temp}>
-								{parseFloat(day.main.temp).toFixed(1)}
-							</Text>
+							</Text> */}
+							<View
+								style={{
+									flexDirection: "row",
+									alignItems: "center",
+									justifyContent: "space-between",
+									width: "100%",
+								}}
+							>
+								<Text style={styles.temp}>
+									{parseFloat(day.main.temp).toFixed(1)}
+								</Text>
+								<Fontisto
+									name={icons[day.weather[0].main]}
+									size={68}
+									color="white"
+								/>
+							</View>
+
 							<Text style={styles.description}>
 								{day.weather[0].main}
 							</Text>
@@ -90,22 +117,32 @@ const styles = StyleSheet.create({
 	cityName: {
 		fontSize: 68,
 		fontWeight: "500",
+		color: "white",
 	},
 	weather: {},
 	day: {
 		width: SCREEN_WIDTH,
-		alignItems: "center",
+		alignItems: "flex-start",
+		paddingHorizontal: 30,
 	},
 	temp: {
 		marginTop: 50,
-		fontSize: 170,
+		fontWeight: "600",
+		fontSize: 100,
+		color: "white",
 	},
 	description: {
-		marginTop: -30,
-		fontSize: 60,
+		marginTop: -10,
+		fontSize: 30,
+		color: "white",
+		fontWeight: "500",
 	},
 	tinyText: {
 		fontSize: 20,
+		marginTop: -5,
+		fontSize: 25,
+		color: "white",
+		fontWeight: "500",
 	},
 	date: {
 		marginBottom: -50,
